@@ -17,12 +17,8 @@ import OT from "@opentok/client";
 import Publisher from "@/components/Publisher.vue";
 import Subscriber from "@/components/Subscriber.vue";
 
-const errorHandler = err => {
-  alert(err.message);
-};
-
 export default {
-  name: "Room",
+  name: "Session",
   components: { Publisher, Subscriber },
   props: {
     apiKey: {
@@ -38,12 +34,10 @@ export default {
       type: String
     }
   },
-  data() {
-    return {
-      streams: [],
-      session: null
-    };
-  },
+  data: () => ({
+    streams: [],
+    session: null
+  }),
   created() {
     this.session = OT.initSession(this.apiKey, this.sessionId);
 
@@ -70,7 +64,9 @@ export default {
     });
   },
   methods: {
-    errorHandler
+    errorHandler: err => {
+      console.error(err.message);
+    }
   }
 };
 </script>

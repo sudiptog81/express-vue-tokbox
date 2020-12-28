@@ -4,6 +4,7 @@
 
 <script>
 import OT from "@opentok/client";
+
 export default {
   name: "Subscriber",
   props: {
@@ -20,8 +21,11 @@ export default {
       required: false
     }
   },
+  data: () => ({
+    subscriber: null
+  }),
   created() {
-    const subscriber = this.session.subscribe(
+    this.subscriber = this.session.subscribe(
       this.stream,
       this.$el,
       this.opts,
@@ -29,11 +33,11 @@ export default {
         if (err) {
           this.$emit("error", err);
         } else {
-          this.$emit("subscriberConnected", subscriber);
+          this.$emit("subscriberConnected", this.subscriber);
         }
       }
     );
-    this.$emit("subscriberCreated", subscriber);
+    this.$emit("subscriberCreated", this.subscriber);
   }
 };
 </script>

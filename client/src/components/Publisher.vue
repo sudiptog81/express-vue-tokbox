@@ -17,27 +17,37 @@ export default {
       required: false
     }
   },
+  data: () => ({
+    publisher: null
+  }),
   mounted: function() {
-    const publisher = OT.initPublisher(this.$el, this.opts, err => {
+    this.publisher = OT.initPublisher(this.$el, this.opts, err => {
       if (err) {
         this.$emit("error", err);
       } else {
         this.$emit("publisherCompleted");
       }
     });
-    this.$emit("publisherCreated", publisher);
+
+    this.$emit("publisherCreated", this.publisher);
+
+    const vm = this;
+
     const publish = () => {
-      this.session.publish(publisher, err => {
-        if (err) {
-          this.$emit("error", err);
-        } else {
-          this.$emit("publisherConnected", publisher);
-        }
-      });
+      if (vm.session)
+        vm.session.publish(vm.publisher, err => {
+          if (err) {
+            vm.$emit("error", err);
+          } else {
+            vm.$emit("publisherConnected", vm.publisher);
+          }
+        });
     };
+
     if (this.session && this.session.isConnected()) {
       publish();
     }
+
     if (this.session) {
       this.session.on("sessionConnected", publish);
     }

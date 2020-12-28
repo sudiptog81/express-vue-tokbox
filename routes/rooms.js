@@ -40,9 +40,9 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:roomId", async (req, res) => {
-  const { roomId } = req.params;
   try {
-    const { roomId: _id, sessionId } = await Room.findOne({ _id: roomId });
+    const { roomId } = req.params;
+    const { sessionId } = await Room.findOne({ _id: roomId });
     const token = openTok.generateToken(sessionId);
     res.json({
       apiKey: process.env.OPENTOK_KEY,
